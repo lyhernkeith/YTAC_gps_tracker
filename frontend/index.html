@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP GPS Tracker</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- <link rel="stylesheet" href="leaflet.css"/>
+  <script src="leaflet.js"></script> -->
+
+  <style>
+    #map { height: 100vh; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    // Initialize map
+    var map = L.map('map').setView([4.377986, 113.977302], 2); 
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    // Marker
+    var marker = L.marker([4.377986, 113.977302]).addTo(map);
+
+    // Function to fetch GPS data
+    async function fetchGPS() {
+      try {
+        const response = await fetch('http://10.157.48.50/gps');
+        const data = await response.json();
+
+        if(data.valid) {
+          const lat = data.lat;
+          const lon = data.lon;
+          marker.setLatLng([lat, lon]);
+          map.setView([lat, lon], 18); // zoom in
+        } else {
+          console.log('GPS not fixed yet, satellites:', data.sats);
+        }
+      } catch(err) {
+        console.error('Error fetching GPS:', err);
+      }
+    }
+
+    // Fetch GPS every 5 seconds
+    setInterval(fetchGPS, 5000);
+    fetchGPS(); // initial fetch
+  </script>
+</body>
+</html>
+

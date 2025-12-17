@@ -23,13 +23,15 @@
 
   <script>
     // Initialize map
-    var map = L.map('map').setView([4.377986, 113.977302], 2); 
+    var map = L.map('map').setView([4.377986, 113.977302], 6); 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19
     }).addTo(map);
 
     // Marker
     var marker = L.marker([4.377986, 113.977302]).addTo(map);
+    var dummy = L.marker([4.36, 113.976752]).addTo(map);
+    var dummy2 = L.marker([4.4, 113.982103]).addTo(map);
 
     // Function to fetch GPS data
     async function fetchGPS() {
